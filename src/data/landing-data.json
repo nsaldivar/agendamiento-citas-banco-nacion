@@ -1,0 +1,72 @@
+{
+  "agencies": [
+    {
+      "id_agencia": 1,
+      "nombre_agencia": "Agencia Cusco Central",
+      "direccion": "Av. El Sol 345",
+      "distrito": "Cusco",
+      "telefono": "084-221100",
+      "latitud": -13.518333,
+      "longitud": -71.978056,
+      "activa": true,
+      "horario": "08:00 am - 05:00 pm (Almuerzo: 01:00 pm - 02:00 pm)",
+      "dias": "L M MI J V"
+    },
+    {
+      "id_agencia": 2,
+      "nombre_agencia": "Agencia Wanchaq",
+      "direccion": "Av. La Cultura 820",
+      "distrito": "Wanchaq",
+      "telefono": "084-245566",
+      "latitud": -13.5225,
+      "longitud": -71.958889,
+      "activa": true,
+      "horario": "08:00 am - 05:00 pm (Almuerzo: 01:00 pm - 02:00 pm)",
+      "dias": "L M MI J V"
+    }
+  ],
+  "procedures": [
+    {
+      "id_tramite": 1,
+      "nombre_tramite": "Apertura de Cuenta de Ahorros",
+      "descripcion": "Apertura de cuenta de ahorros personal en moneda nacional.",
+      "duracion_minutos": 30,
+      "activo": true,
+      "requisitos": [
+        {
+          "id_requisito": 1,
+          "id_tramite": 1,
+          "descripcion_requisito": "DNI físico vigente (original y copia).",
+          "es_obligatorio": true
+        },
+        {
+          "id_requisito": 2,
+          "id_tramite": 1,
+          "descripcion_requisito": "Recibo de servicio público (agua o luz) con antigüedad no mayor a 2 meses.",
+          "es_obligatorio": true
+        }
+      ]
+    },
+    {
+      "id_tramite": 2,
+      "nombre_tramite": "Cobro de Giros y Bonos",
+      "descripcion": "Atención para cobro de giros nacionales y subvenciones del Estado.",
+      "duracion_minutos": 15,
+      "activo": true,
+      "requisitos": [
+        {
+          "id_requisito": 3,
+          "id_tramite": 2,
+          "descripcion_requisito": "DNI físico original del beneficiario.",
+          "es_obligatorio": true
+        },
+        {
+          "id_requisito": 4,
+          "id_tramite": 2,
+          "descripcion_requisito": "Código de transacción de 10 dígitos proporcionado por el remitente.",
+          "es_obligatorio": true
+        }
+      ]
+    }
+  ]
+}

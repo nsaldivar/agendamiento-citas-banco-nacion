@@ -1,0 +1,2 @@
+import type { Appointment, CreateAppointmentInput } from "@/domain/entities/appointment";
+export interface AppointmentRepository { create(input: CreateAppointmentInput): Promise<Appointment>; findByCitizen(citizenId: string): Promise<Appointment[]>; }

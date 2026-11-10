@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bn-red: #C8102E;
+    --bn-red-dark: #990B1B;
+    --bn-red-light: #D41432;
+    --bn-red-soft: #FFF1F2;
+    --bn-warm-cream: #FAF5F0;
+    --bn-carbon: #1E252D;
+
+    --bn-gold: #D4AF37;
+    --bn-gold-dark: #B8860B;
+    --bn-gold-light: #FFFBEB;
+
+    --bn-green: #10B981;
+    --bn-green-dark: #047857;
+    --bn-green-soft: #ECFDF5;
+
+    --bn-slate-900: #1E252D;
+    --bn-slate-800: #1E293B;
+    --bn-slate-700: #334155;
+    --bn-slate-500: #64748B;
+
+    --bn-bg-light: #F8FAFC;
+    --bn-white: #FFFFFF;
+  }
+
+  body {
+    background-color: #F8FAFC;
+    color: #1E252D;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.bn-curve-mask {
+  clip-path: polygon(0 0, 100% 0, 93% 100%, 0% 100%);
+}
+
+@media (max-width: 1024px) {
+  .bn-curve-mask {
+    clip-path: none;
+  }
+}
+
+.bn-shadow-card {
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+}
+
+.bn-shadow-hover {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bn-shadow-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -4px rgba(200, 16, 46, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
+}
+
+.bn-gradient-red {
+  background: linear-gradient(135deg, #C8102E 0%, #9A0B22 100%);
+}
+
+@keyframes progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.animate-progress {
+  animation: progress 4.5s linear;
+}
+
+.bn-gradient-header {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C8102E;
+}

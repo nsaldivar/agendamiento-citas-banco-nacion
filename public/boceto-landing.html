@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing Agendamiento Web - Banco de la Nación Perú</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    @keyframes progress {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+    .animate-progress {
+      animation: progress 4.5s linear infinite;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-[#1E252D] antialiased selection:bg-[#C8102E] selection:text-white">
+
+  <!-- ================= BARRA DE INSPECCIÓN DE PALETA ================= -->
+  <aside class="sticky top-0 z-50 bg-[#1E252D] text-white border-b border-slate-700/80 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div class="flex items-center gap-2">
+        <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="font-bold tracking-wide uppercase text-slate-300">Paleta Oficial Banco de la Nación</span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <div class="flex items-center gap-1.5 px-2 py-0.5 rounded bg-slate-800 border border-slate-700">
+          <span class="w-3.5 h-3.5 rounded-full bg-[#C8102E]"></span>
+          <span class="font-mono text-slate-200">#C8102E</span>
+          <span class="text-[10px] text-slate-400">Primario</span>
+        </div>
+        <div class="flex items-center gap-1.5 px-2 py-0.5 rounded bg-slate-800 border border-slate-700">
+          <span class="w-3.5 h-3.5 rounded-full bg-[#990B1B]"></span>
+          <span class="font-mono text-slate-200">#990B1B</span>
+          <span class="text-[10px] text-slate-400">Carmín Págalo</span>
+        </div>
+        <div class="flex items-center gap-1.5 px-2 py-0.5 rounded bg-slate-800 border border-slate-700">
+          <span class="w-3.5 h-3.5 rounded-full bg-[#1E252D]"></span>
+          <span class="font-mono text-slate-200">#1E252D</span>
+          <span class="text-[10px] text-slate-400">Carbón</span>
+        </div>
+        <div class="flex items-center gap-1.5 px-2 py-0.5 rounded bg-slate-800 border border-slate-700">
+          <span class="w-3.5 h-3.5 rounded-full bg-[#FAF5F0] border border-slate-500"></span>
+          <span class="font-mono text-slate-200">#FAF5F0</span>
+          <span class="text-[10px] text-slate-400">Cálido</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= HEADER INSTITUCIONAL BN ================= -->
+  <header class="bg-white border-b border-slate-200 sticky top-[37px] z-40 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <div class="flex items-center gap-8">
+        <a href="#" class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-[#C8102E] flex items-center justify-center text-white font-black text-sm shadow-md">
+            BN
+          </div>
+          <div class="leading-tight">
+            <span class="block text-lg font-bold tracking-tight text-[#1E252D]">Banco</span>
+            <span class="block text-xs font-black tracking-wider text-[#C8102E] uppercase">de la Nación</span>
+          </div>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-6 text-[14px] font-semibold text-[#1E252D]">
+          <a href="#tramites" class="hover:text-[#C8102E] transition-colors py-2">Trámites y Servicios</a>
+          <a href="#agencias" class="hover:text-[#C8102E] transition-colors py-2">Directorio de Agencias</a>
+          <a href="#" class="text-[#C8102E] font-bold flex items-center gap-1.5 py-2">
+            <span class="w-2 h-2 rounded-full bg-[#C8102E]"></span>
+            Agendamiento Web
+          </a>
+        </nav>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <button class="px-4 py-2 border border-slate-300 rounded-full text-[#1E252D] hover:text-[#C8102E] hover:border-[#C8102E] font-bold text-xs sm:text-sm transition flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-[#C8102E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+          Mi Cuenta
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO SHOWCASE: 4 PASOS PARA AGENDAR TU CITA ================= -->
+  <section class="relative bg-[#FAF5F0] border-b border-slate-200/80 overflow-hidden py-10 sm:py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        
+        <!-- Columna Izquierda: Presentación y Selector de Pasos -->
+        <div class="lg:col-span-6 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-100/70 border border-red-200 text-[#C8102E] text-xs font-bold uppercase tracking-wider">
+            <span class="w-2 h-2 rounded-full bg-[#C8102E] animate-pulse"></span>
+            Sistema Oficial de Agendamiento Web
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-[#1E252D] leading-[1.18] tracking-tight">
+            Tu turno en el Banco de la Nación, <span class="text-[#C8102E]">rápido y sin colas</span>
+          </h1>
+
+          <p class="text-base text-slate-600 leading-relaxed font-medium">
+            Conoce el proceso de 4 pasos para reservar tu atención presencial en agencias autorizadas a nivel nacional y acceder de forma preferencial en tu horario asignado.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-3 pt-2">
+            <a href="#tramites" class="px-6 py-3.5 bg-[#C8102E] hover:bg-[#990B1B] text-white font-extrabold rounded-xl shadow-md hover:shadow-lg transition-all text-sm uppercase tracking-wider flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              <span>Agendar Cita en Línea</span>
+            </a>
+            <a href="#agencias" class="px-5 py-3.5 bg-white hover:bg-slate-100 text-[#1E252D] border border-slate-300 font-bold rounded-xl shadow-xs transition-all text-sm uppercase tracking-wider flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#C8102E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+              <span>Ubicar Agencias</span>
+            </a>
+          </div>
+
+          <!-- Selector de los 4 Pasos -->
+          <div class="pt-6 border-t border-slate-200 space-y-2">
+            <span class="text-[11px] font-black uppercase tracking-wider text-slate-500 block">
+              Pasos del proceso de agendamiento:
+            </span>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              
+              <button onclick="goToStep(1)" id="tab-btn-1" class="p-2.5 rounded-xl border text-left transition-all cursor-pointer bg-white border-[#C8102E] shadow-sm ring-2 ring-red-100">
+                <div class="flex items-center gap-1.5 mb-1">
+                  <span class="w-5 h-5 rounded-full font-black text-[10px] flex items-center justify-center bg-[#C8102E] text-white">1</span>
+                  <span class="text-[10px] font-extrabold uppercase text-slate-500">Paso 01</span>
+                </div>
+                <p class="text-[11px] font-bold text-[#1E252D] leading-tight truncate">Inicia Sesión</p>
+              </button>
+
+              <button onclick="goToStep(2)" id="tab-btn-2" class="p-2.5 rounded-xl border text-left transition-all cursor-pointer bg-white/70 border-slate-200 opacity-80 hover:opacity-100">
+                <div class="flex items-center gap-1.5 mb-1">
+                  <span class="w-5 h-5 rounded-full font-black text-[10px] flex items-center justify-center bg-slate-200 text-slate-700">2</span>
+                  <span class="text-[10px] font-extrabold uppercase text-slate-500">Paso 02</span>
+                </div>
+                <p class="text-[11px] font-bold text-[#1E252D] leading-tight truncate">Elige Agencia</p>
+              </button>
+
+              <button onclick="goToStep(3)" id="tab-btn-3" class="p-2.5 rounded-xl border text-left transition-all cursor-pointer bg-white/70 border-slate-200 opacity-80 hover:opacity-100">
+                <div class="flex items-center gap-1.5 mb-1">
+                  <span class="w-5 h-5 rounded-full font-black text-[10px] flex items-center justify-center bg-slate-200 text-slate-700">3</span>
+                  <span class="text-[10px] font-extrabold uppercase text-slate-500">Paso 03</span>
+                </div>
+                <p class="text-[11px] font-bold text-[#1E252D] leading-tight truncate">Trámite y Hora</p>
+              </button>
+
+              <button onclick="goToStep(4)" id="tab-btn-4" class="p-2.5 rounded-xl border text-left transition-all cursor-pointer bg-white/70 border-slate-200 opacity-80 hover:opacity-100">
+                <div class="flex items-center gap-1.5 mb-1">
+                  <span class="w-5 h-5 rounded-full font-black text-[10px] flex items-center justify-center bg-slate-200 text-slate-700">4</span>
+                  <span class="text-[10px] font-extrabold uppercase text-slate-500">Paso 04</span>
+                </div>
+                <p class="text-[11px] font-bold text-[#1E252D] leading-tight truncate">Descarga tu QR</p>
+              </button>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna Derecha: Tarjeta Dinámica de Paso con Imagen que Cambia Poco a Poco -->
+        <div class="lg:col-span-6">
+          <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden flex flex-col transition-all duration-500 hover:shadow-2xl">
+            
+            <div class="p-4 sm:p-5 pb-3 flex items-center justify-between border-b border-slate-100 bg-slate-50/70">
+              <div class="flex items-center gap-2">
+                <span id="card-badge" class="px-2.5 py-1 rounded-full bg-[#C8102E] text-white font-extrabold text-[11px] uppercase tracking-wider">
+                  Paso 01 / 04
+                </span>
+                <span id="card-tag" class="text-xs font-bold text-slate-600">
+                  Identificación Segura
+                </span>
+              </div>
+
+              <div class="flex items-center gap-1.5">
+                <button onclick="prevStep()" class="w-7 h-7 rounded-full bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 flex items-center justify-center text-xs font-bold transition">‹</button>
+                <button onclick="nextStep()" class="w-7 h-7 rounded-full bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 flex items-center justify-center text-xs font-bold transition">›</button>
+                <button onclick="toggleAuto()" id="auto-btn" class="px-2 py-1 rounded-md text-[10px] font-bold uppercase transition bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  ● Auto
+                </button>
+              </div>
+            </div>
+
+            <!-- Imagen del Paso -->
+            <div class="relative h-60 sm:h-64 bg-slate-100 overflow-hidden group">
+              <img id="card-img" src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80" alt="Paso" class="w-full h-full object-cover transition-all duration-700" />
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent flex items-end p-5">
+                <div>
+                  <span id="card-overlay-tag" class="text-amber-300 text-[11px] font-extrabold uppercase tracking-widest block">
+                    Identificación Segura
+                  </span>
+                  <h3 id="card-overlay-title" class="text-white text-lg sm:text-xl font-black leading-tight drop-shadow-md">
+                    Inicia Sesión con tu DNI
+                  </h3>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contenido y Explicación -->
+            <div class="p-5 sm:p-6 space-y-4">
+              <div class="space-y-1.5">
+                <h4 id="card-subtitle" class="text-sm font-extrabold text-[#C8102E]">
+                  Acceso y validación ciudadana
+                </h4>
+                <p id="card-desc" class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
+                  Ingresa con tu número de DNI para vincular tu turno a tu cuenta ciudadana. Podrás consultar el estado de tus citas y recibir avisos y recordatorios oficiales por SMS.
+                </p>
+              </div>
+
+              <div class="pt-2 flex items-center justify-between border-t border-slate-100">
+                <div class="flex items-center gap-1.5" id="dots-container">
+                  <span class="inline-block h-1.5 w-6 bg-[#C8102E] rounded-full"></span>
+                  <span class="inline-block h-1.5 w-2 bg-slate-300 rounded-full"></span>
+                  <span class="inline-block h-1.5 w-2 bg-slate-300 rounded-full"></span>
+                  <span class="inline-block h-1.5 w-2 bg-slate-300 rounded-full"></span>
+                </div>
+
+                <a href="#tramites" id="card-btn" class="px-4 py-2 bg-[#C8102E] hover:bg-[#990B1B] text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition shadow-sm">
+                  Iniciar Sesión
+                </a>
+              </div>
+            </div>
+
+            <!-- Barra de Progreso de Tiempo -->
+            <div class="w-full bg-slate-100 h-1 overflow-hidden">
+              <div id="progress-bar" class="bg-[#C8102E] h-full animate-progress"></div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= SECCIÓN: TRÁMITES Y AGENCIAS CON EL MISMO DISEÑO ================= -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-16">
+    
+    <!-- Catálogo de Trámites -->
+    <section id="tramites" class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-sm space-y-8">
+      <div class="text-center max-w-2xl mx-auto">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-100/70 border border-red-200 text-[#C8102E] text-xs font-bold uppercase tracking-wider mb-3">
+          <span class="w-2 h-2 rounded-full bg-[#C8102E]"></span>
+          Requisitos y Servicios Oficiales
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1E252D] tracking-tight">
+          CATÁLOGO DE TRÁMITES Y SERVICIOS
+        </h2>
+        <div class="w-16 h-1 bg-[#C8102E] mx-auto mt-3 rounded-full"></div>
+        <p className="text-xs sm:text-sm text-slate-600 mt-2 font-medium">
+          Consulta los requisitos vigentes antes de visitar la agencia del Banco de la Nación para ser atendido de forma rápida.
+        </p>
+      </div>
+
+      <!-- Grid de Trámites -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        
+        <!-- Trámite 1 -->
+        <div class="border border-slate-200 rounded-2xl overflow-hidden shadow-xs hover:border-[#C8102E]/40 hover:shadow-md transition-all bg-white flex flex-col justify-between">
+          <div class="h-1.5 bg-[#C8102E]"></div>
+          <div class="p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-red-50 text-[#C8102E] flex items-center justify-center font-bold text-lg">📄</div>
+                <div>
+                  <h3 class="font-extrabold text-[#1E252D] text-base">Apertura de Cuenta DNI / Ahorros</h3>
+                  <span class="text-[11px] font-bold text-[#C8102E] bg-red-50 px-2 py-0.5 rounded-md">⏱️ 15 min estimado</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-xs text-slate-600 font-medium">Apertura presencial de cuenta de ahorros para personas naturales con entrega inmediata de tarjeta de débito.</p>
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs text-slate-700">
+              <strong class="text-[#C8102E] uppercase font-bold text-[10px] block mb-1">Requisitos:</strong>
+              DNI vigente en original y copia, recibo de servicios públicos no mayor a 2 meses.
+            </div>
+            <div class="flex justify-end pt-2">
+              <a href="#agencias" class="px-4 py-2 bg-[#C8102E] hover:bg-[#990B1B] text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition">
+                Agendar Cita
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trámite 2 -->
+        <div class="border border-slate-200 rounded-2xl overflow-hidden shadow-xs hover:border-[#C8102E]/40 hover:shadow-md transition-all bg-white flex flex-col justify-between">
+          <div class="h-1.5 bg-[#C8102E]"></div>
+          <div class="p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-red-50 text-[#C8102E] flex items-center justify-center font-bold text-lg">💳</div>
+                <div>
+                  <h3 class="font-extrabold text-[#1E252D] text-base">Renovación de Tarjeta Multired Débito</h3>
+                  <span class="text-[11px] font-bold text-[#C8102E] bg-red-50 px-2 py-0.5 rounded-md">⏱️ 10 min estimado</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-xs text-slate-600 font-medium">Reposición por vencimiento, deterioro o pérdida de tarjeta de débito Multired con activación de clave de 4 dígitos.</p>
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs text-slate-700">
+              <strong class="text-[#C8102E] uppercase font-bold text-[10px] block mb-1">Requisitos:</strong>
+              DNI original del titular de la cuenta, huella dactilar biométrica en ventanilla.
+            </div>
+            <div class="flex justify-end pt-2">
+              <a href="#agencias" class="px-4 py-2 bg-[#C8102E] hover:bg-[#990B1B] text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition">
+                Agendar Cita
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Directorio de Agencias con Mapa Leaflet Funcional -->
+    <section id="agencias" class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-sm space-y-8">
+      <div class="text-center max-w-2xl mx-auto">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-100/70 border border-red-200 text-[#C8102E] text-xs font-bold uppercase tracking-wider mb-3">
+          <span class="w-2 h-2 rounded-full bg-[#C8102E]"></span>
+          Red Nacional de Agencias BN
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1E252D] tracking-tight">
+          DIRECTORIO DE AGENCIAS Y GEOLOCALIZACIÓN
+        </h2>
+        <div class="w-16 h-1 bg-[#C8102E] mx-auto mt-3 rounded-full"></div>
+        <p class="text-xs sm:text-sm text-slate-600 mt-2 font-medium">
+          Ubica tu agencia más cercana en tiempo real con nuestra herramienta de mapa satelital interactivo.
+        </p>
+      </div>
+
+      <!-- Visualizador del Mapa Funcional y Tarjetas -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        
+        <!-- Mapa Leaflet Funcional -->
+        <div class="lg:col-span-6 flex flex-col bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-xl">
+          <div class="p-3 bg-slate-50 border-b border-slate-200 flex gap-2">
+            <input id="demo-search-input" type="text" placeholder="Buscar dirección en el mapa (ej: Av. El Sol, Cusco)..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-semibold focus:outline-none focus:border-[#C8102E]" />
+            <button onclick="searchDemoMap()" class="px-4 py-2 bg-[#1E252D] hover:bg-[#C8102E] text-white text-xs font-bold rounded-xl transition">Ubicar</button>
+          </div>
+          <div id="demo-leaflet-map" class="w-full h-80 sm:h-96 bg-slate-100 z-10"></div>
+          <div class="p-4 bg-white border-t border-slate-200 text-xs">
+            <span class="text-[10px] font-black uppercase text-[#C8102E] block" id="selected-agency-dist">CUSCO - CENTRO</span>
+            <strong class="text-sm font-black text-[#1E252D]" id="selected-agency-name">Agencia Principal Av. El Sol</strong>
+            <p class="text-slate-600 mt-1" id="selected-agency-addr">📍 Av. El Sol 320, Cusco</p>
+          </div>
+        </div>
+
+        <!-- Tarjetas de Agencia -->
+        <div class="lg:col-span-6 space-y-4">
+          
+          <div onclick="centerAgency(-13.518333, -71.978056, 'Agencia Principal Av. El Sol', 'Av. El Sol 320, Cusco', 'CUSCO - CENTRO')" class="bg-white border-2 border-[#C8102E] ring-2 ring-red-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition cursor-pointer">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[10px] font-black uppercase text-[#C8102E]">Cusco - Centro</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300">⭐ MÁS CERCANA (0.8 km)</span>
+            </div>
+            <h3 class="font-black text-[#1E252D] text-sm mt-1">Agencia Principal Av. El Sol</h3>
+            <p class="text-slate-600 text-xs font-medium">Av. El Sol 320, Cusco</p>
+            <div class="mt-2 bg-slate-50 p-2 rounded-xl text-[11px] font-bold text-slate-700">🕒 Lun a Vie: 8:00 am - 5:00 pm</div>
+            <div class="flex gap-2 mt-3">
+              <button class="flex-1 py-1.5 bg-slate-100 hover:bg-slate-200 text-[#1E252D] font-bold rounded-xl text-xs">Ver en Mapa</button>
+              <button class="flex-1 py-1.5 bg-[#C8102E] text-white font-bold rounded-xl text-xs shadow-sm">Agendar Cita</button>
+            </div>
+          </div>
+
+          <div onclick="centerAgency(-13.5283, -71.9542, 'Agencia Wanchaq', 'Av. Garcilaso 402, Wanchaq', 'WANCHAQ')" class="bg-white border border-slate-200 hover:border-slate-400 rounded-2xl p-4 shadow-sm hover:shadow-md transition cursor-pointer">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[10px] font-black uppercase text-[#C8102E]">Wanchaq</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-slate-100 text-slate-700">📍 2.4 km</span>
+            </div>
+            <h3 class="font-black text-[#1E252D] text-sm mt-1">Agencia Wanchaq</h3>
+            <p class="text-slate-600 text-xs font-medium">Av. Garcilaso 402, Wanchaq</p>
+            <div class="mt-2 bg-slate-50 p-2 rounded-xl text-[11px] font-bold text-slate-700">🕒 Lun a Vie: 8:00 am - 5:00 pm</div>
+            <div class="flex gap-2 mt-3">
+              <button class="flex-1 py-1.5 bg-slate-100 hover:bg-slate-200 text-[#1E252D] font-bold rounded-xl text-xs">Ver en Mapa</button>
+              <button class="flex-1 py-1.5 bg-[#C8102E] text-white font-bold rounded-xl text-xs shadow-sm">Agendar Cita</button>
+            </div>
+          </div>
+
+          <div onclick="centerAgency(-13.5350, -71.9100, 'Agencia San Jerónimo', 'Av. Manco Cápac 123, San Jerónimo', 'SAN JERÓNIMO')" class="bg-white border border-slate-200 hover:border-slate-400 rounded-2xl p-4 shadow-sm hover:shadow-md transition cursor-pointer">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[10px] font-black uppercase text-[#C8102E]">San Jerónimo</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-slate-100 text-slate-700">📍 6.1 km</span>
+            </div>
+            <h3 class="font-black text-[#1E252D] text-sm mt-1">Agencia San Jerónimo</h3>
+            <p class="text-slate-600 text-xs font-medium">Av. Manco Cápac 123, San Jerónimo</p>
+            <div class="mt-2 bg-slate-50 p-2 rounded-xl text-[11px] font-bold text-slate-700">🕒 Lun a Vie: 8:00 am - 5:00 pm</div>
+            <div class="flex gap-2 mt-3">
+              <button class="flex-1 py-1.5 bg-slate-100 hover:bg-slate-200 text-[#1E252D] font-bold rounded-xl text-xs">Ver en Mapa</button>
+              <button class="flex-1 py-1.5 bg-[#C8102E] text-white font-bold rounded-xl text-xs shadow-sm">Agendar Cita</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-[#1E252D] text-slate-300 py-10 border-t-4 border-[#C8102E] text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-[#C8102E] flex items-center justify-center text-white font-black">BN</div>
+        <span class="text-white font-bold">Banco de la Nación - El banco de todos los peruanos</span>
+      </div>
+      <p class="text-slate-400">© 2026 Banco de la Nación Perú | Sistema Oficial de Agendamiento</p>
+    </div>
+  </footer>
+
+  <script>
+    const stepsData = [
+      {
+        step: 1,
+        badge: 'Paso 01 / 04',
+        tag: 'Identificación Segura',
+        title: 'Inicia Sesión con tu DNI',
+        subtitle: 'Acceso y validación ciudadana',
+        desc: 'Ingresa con tu número de DNI para vincular tu turno a tu cuenta ciudadana. Podrás consultar el estado de tus citas y recibir avisos y recordatorios oficiales por SMS.',
+        img: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80',
+        btnText: 'Iniciar Sesión',
+      },
+      {
+        step: 2,
+        badge: 'Paso 02 / 04',
+        tag: 'Geolocalización GPS',
+        title: 'Localiza y Elige tu Agencia BN',
+        subtitle: 'Encuentra la sede más cercana',
+        desc: 'El sistema calcula en tiempo real la distancia en kilómetros a la agencia del Banco de la Nación más cercana a tu ubicación para que ahorres tiempo en tu traslado.',
+        img: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=80',
+        btnText: 'Ver Agencias en Mapa',
+      },
+      {
+        step: 3,
+        badge: 'Paso 03 / 04',
+        tag: 'Reserva de Ventanilla',
+        title: 'Selecciona Trámite y Horario',
+        subtitle: 'Elige tu operación bancaria y fecha',
+        desc: 'Selecciona la gestión que requieres (cuentas de ahorros, pagos de tasas, cobro de bonos o pensiones) y reserva el bloque horario de tu conveniencia.',
+        img: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=800&q=80',
+        btnText: 'Explorar Trámites',
+      },
+      {
+        step: 4,
+        badge: 'Paso 04 / 04',
+        tag: 'Atención Prioritaria',
+        title: 'Descarga tu Comprobante y Código QR',
+        subtitle: 'Llega a la agencia y sé atendido sin colas',
+        desc: 'Obtén tu comprobante digital oficial con código QR descargable. Al acudir a la agencia, preséntalo en ventanilla para ingresar de forma preferencial en tu turno reservado.',
+        img: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80',
+        btnText: 'Agendar Cita Ahora',
+      }
+    ];
+
+    let currentStepIndex = 0;
+    let isAuto = true;
+    let autoInterval = null;
+
+    function renderStep() {
+      const data = stepsData[currentStepIndex];
+      document.getElementById('card-badge').textContent = data.badge;
+      document.getElementById('card-tag').textContent = data.tag;
+      document.getElementById('card-overlay-tag').textContent = data.tag;
+      document.getElementById('card-overlay-title').textContent = data.title;
+      document.getElementById('card-subtitle').textContent = data.subtitle;
+      document.getElementById('card-desc').textContent = data.desc;
+      document.getElementById('card-img').src = data.img;
+      document.getElementById('card-btn').textContent = data.btnText;
+
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById(`tab-btn-${i}`);
+        if (i === data.step) {
+          btn.className = 'p-2.5 rounded-xl border text-left transition-all cursor-pointer bg-white border-[#C8102E] shadow-sm ring-2 ring-red-100';
+          btn.querySelector('span:first-child').className = 'w-5 h-5 rounded-full font-black text-[10px] flex items-center justify-center bg-[#C8102E] text-white';
+        } else {
+          btn.className = 'p-2.5 rounded-xl border text-left transition-all cursor-pointer bg-white/70 border-slate-200 opacity-80 hover:opacity-100';
+          btn.querySelector('span:first-child').className = 'w-5 h-5 rounded-full font-black text-[10px] flex items-center justify-center bg-slate-200 text-slate-700';
+        }
+      }
+
+      const dots = document.getElementById('dots-container').children;
+      for (let i = 0; i < 4; i++) {
+        dots[i].className = i === currentStepIndex ? 'inline-block h-1.5 w-6 bg-[#C8102E] rounded-full' : 'inline-block h-1.5 w-2 bg-slate-300 rounded-full';
+      }
+    }
+
+    function goToStep(step) {
+      currentStepIndex = step - 1;
+      renderStep();
+    }
+
+    function nextStep() {
+      currentStepIndex = (currentStepIndex + 1) % 4;
+      renderStep();
+    }
+
+    function prevStep() {
+      currentStepIndex = (currentStepIndex - 1 + 4) % 4;
+      renderStep();
+    }
+
+    function toggleAuto() {
+      isAuto = !isAuto;
+      const btn = document.getElementById('auto-btn');
+      const pb = document.getElementById('progress-bar');
+      if (isAuto) {
+        btn.textContent = '● Auto';
+        btn.className = 'px-2 py-1 rounded-md text-[10px] font-bold uppercase transition bg-emerald-50 text-emerald-700 border border-emerald-200';
+        pb.style.display = 'block';
+        startAuto();
+      } else {
+        btn.textContent = 'Pausado';
+        btn.className = 'px-2 py-1 rounded-md text-[10px] font-bold uppercase transition bg-slate-100 text-slate-600 border border-slate-200';
+        pb.style.display = 'none';
+        clearInterval(autoInterval);
+      }
+    }
+
+    function startAuto() {
+      clearInterval(autoInterval);
+      autoInterval = setInterval(() => {
+        if (isAuto) nextStep();
+      }, 4500);
+    }
+
+    startAuto();
+
+    // Leaflet Mapa Interactivo para el Boceto
+    let leafletMap = null;
+    let mapMarker = null;
+
+    function initDemoLeaflet() {
+      const mapContainer = document.getElementById('demo-leaflet-map');
+      if (!mapContainer || leafletMap) return;
+
+      leafletMap = L.map('demo-leaflet-map').setView([-13.518333, -71.978056], 14);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(leafletMap);
+
+      const redPin = L.divIcon({
+        className: 'bn-pin',
+        html: `
+          <div style="background: #C8102E; width: 34px; height: 34px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+            <span style="transform: rotate(45deg); color: white; font-weight: bold; font-size: 10px;">BN</span>
+          </div>
+        `,
+        iconSize: [34, 34],
+        iconAnchor: [17, 34],
+      });
+
+      mapMarker = L.marker([-13.518333, -71.978056], { icon: redPin }).addTo(leafletMap)
+        .bindPopup('<b>Agencia Principal Av. El Sol</b><br>Av. El Sol 320, Cusco').openPopup();
+    }
+
+    function centerAgency(lat, lng, name, addr, dist) {
+      if (!leafletMap) return;
+      leafletMap.flyTo([lat, lng], 15);
+      if (mapMarker) {
+        mapMarker.setLatLng([lat, lng]);
+        mapMarker.setPopupContent(`<b>${name}</b><br>${addr}`).openPopup();
+      }
+      document.getElementById('selected-agency-dist').textContent = dist;
+      document.getElementById('selected-agency-name').textContent = name;
+      document.getElementById('selected-agency-addr').textContent = `📍 ${addr}`;
+    }
+
+    function searchDemoMap() {
+      const q = document.getElementById('demo-search-input').value;
+      if (!q || !leafletMap) return;
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q + ', Cusco, Peru')}&limit=1`)
+        .then(r => r.json())
+        .then(d => {
+          if (d && d.length > 0) {
+            const lat = parseFloat(d[0].lat);
+            const lng = parseFloat(d[0].lon);
+            centerAgency(lat, lng, 'Lugar Encontrado', d[0].display_name.split(',').slice(0, 2).join(','), 'UBICACIÓN');
+          } else {
+            alert('No se encontró la dirección en el mapa.');
+          }
+        });
+    }
+
+    window.addEventListener('DOMContentLoaded', initDemoLeaflet);
+    setTimeout(initDemoLeaflet, 300);
+  </script>
+</body>
+</html>
